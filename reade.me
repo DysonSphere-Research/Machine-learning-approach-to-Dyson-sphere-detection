@@ -1,0 +1,184 @@
+# Isolation Forest for Dyson Sphere Candidate Discovery
+
+This repository provides a publication-ready Python pipeline to train and evaluate
+Isolation Forest models for Dyson Sphere candidate detection. It supports two
+training regimes (Dyson-centric and Normal-centric) and a **weighted fusion** of
+their rankings into a single, unified list.
+
+The code was developed in the context of:
+
+> M. De Carolis, *Dyson Sphere detection with Machine Learning* (preprint / under review).
+
+Please cite both this repository and the above article if you use the code.
+
+---
+
+## 🔧 Installation
+
+**Requirements**
+- Python ≥ 3.9
+- `numpy`, `pandas`, `scikit-learn`, `tqdm`, `joblib`
+
+**Install**
+```bash
+python -m venv .venv
+# Linux/macOS
+source .venv/bin/activate
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt
+```
+
+---
+
+## 📂 Input data layout
+
+Place your files in a single directory (e.g. `./data`):
+
+```
+data/
+  ├─ train.csv          # Dyson-centric training set (must include 'source_id' + numeric features)
+  ├─ trainNormal.csv    # Normal-centric training set (must include 'source_id' + numeric features)
+  ├─ test_normal.csv    # Evaluation set (must include 'source_id' + numeric features)
+  ├─ num_ds.txt         # integer: number of Dyson spies at the TOP of test_normal.csv
+  ├─ numNorm.txt        # integer: number of Normal spies immediately AFTER the Dyson block
+```
+
+**CSV schema**
+- Comma-separated, with header.
+- First column: **`source_id`** (unique per row).
+- All remaining columns: **numeric features** only (float/int).
+- No missing values (NaN/Inf).
+- Consistent feature names and order across all files.
+
+**Spy convention (implicit labels used for evaluation)**
+- Dyson spies = first `num_ds` rows of `test_normal.csv`.
+- Normal spies = rows `[num_ds : num_ds + numNorm)` of `test_normal.csv`.
+
+---
+
+## 💻 Usage
+
+Basic run (default = **fused ranking only**, Dyson weight 0.50, min-max normalization):
+```bash
+python isolation_forest_pipeline.py --data-dir ./data --out-dir ./results
+```
+
+Emit specific outputs:
+```bash
+# only Dyson ranking
+python isolation_forest_pipeline.py --data-dir ./data --out-dir ./results --emit dyson
+
+# Dyson + Normal rankings
+python isolation_forest_pipeline.py --data-dir ./data --out-dir ./results --emit dyson,normal
+
+# Dyson + Normal + fused ranking
+python isolation_forest_pipeline.py --data-dir ./data --out-dir ./results --emit dyson,normal,fused
+```
+
+Fused ranking with custom weights (Dyson weight α, Normal weight = 1−α):
+```bash
+python isolation_forest_pipeline.py   --data-dir ./data --out-dir ./results   --emit fused --fuse-weights 0.9,0.7,0.5
+```
+
+Metrics (Precision/Recall/F1@k) on the fused ranking:
+```bash
+python isolation_forest_pipeline.py   --data-dir ./data --out-dir ./results   --emit fused --emit-metrics --metrics-target dyson
+```
+
+**Duplicate IDs policy (before fusion)**  
+If `source_id` appears multiple times in the test ranking produced by a model, enforce uniqueness via:
+```
+--on-duplicate {error | drop-keep-best | mean | max | min}
+```
+Default is `drop-keep-best` (keeps the highest-score row per ID).
+
+---
+
+## ⚙️ Command-line options
+
+- `--data-dir` path to the folder with input files (**required**)
+- `--out-dir` path to the folder for outputs (**required**)
+- `--emit` what to save:
+  - `dyson` | `normal` | `fused` | `fused_only` | `dyson,normal` | `dyson,normal,fused`
+  - default: `fused_only` (computes both models, saves only the fused ranking)
+
+**Model hyperparameters**
+- `--n-estimators` (default 100)
+- `--max-samples` (`"auto"` | int | float in (0,1])
+- `--contamination` (`"auto"` | float in (0, 0.5])
+- `--random-state` (default 42)
+- `--n-jobs` (parallelism)
+
+**Fusion**
+- `--fuse-weights` comma-separated Dyson weights (e.g., `0.9,0.7,0.5`); Normal weight = `1−α`
+- `--norm-scheme` normalization: `minmax | zscore | none` (default `minmax`)
+
+**Metrics**
+- `--emit-metrics` save Precision/Recall/F1@k CSV for fused ranking
+- `--metrics-target` class considered positive for metrics: `dyson | normal` (default `dyson`)
+
+**Custom file names (optional)**
+- `--train-file-dyson` (default `train.csv`)
+- `--train-file-normal` (default `trainNormal.csv`)
+- `--test-file` (default `test_normal.csv`)
+- `--num-ds-file` (default `num_ds.txt`)
+- `--num-norm-file` (default `numNorm.txt`)
+
+**Duplicates policy**
+- `--on-duplicate` `{error | drop-keep-best | mean | max | min}` (default `drop-keep-best`)
+
+---
+
+## 📊 Outputs
+
+All files are written to `--out-dir`. Examples:
+
+- `isoforest_ranking_dyson.csv`  
+  Columns: `ID, score, is_dyson_spy`
+
+- `isoforest_ranking_normal.csv`  
+  Columns: `ID, score, is_dyson_spy`  
+  *(we expose `is_dyson_spy` here to quickly check behavior vs Dyson positives).*
+
+- `isoforest_ranking_fused_wDy0p90_wN0p10_minmax.csv`  
+  Columns: `ID, score, is_dyson_spy, is_normal_spy`  
+  *(weights and normalization scheme are encoded in the filename).*
+
+- (optional) `isoforest_metrics_{dyson|normal}_wDy{α}_<norm>.csv`  
+  Columns: `k, precision, recall, f1` (cumulative @k)
+
+- Models & logs:  
+  `isoforest_model_dyson.joblib`, `isoforest_model_normal.joblib`  
+  `isoforest_dyson.log`, `isoforest_normal.log`, `isoforest_fused.log`
+
+---
+
+## 🧪 Examples & quick checks
+
+Create a `./data` directory next to the script and place your CSVs there, then run one of the example commands below.
+Results will be written to `./results` (created if missing).
+
+---
+
+## 🧷 Tips
+
+- **PowerShell** line wrapping: use backtick `` ` `` at the **end of line** with no trailing spaces.
+- **PyCharm**: put all arguments in *Run/Debug Configurations → Parameters*; no need for shell escaping.
+
+---
+
+## 📜 License
+
+MIT License (see `LICENSE`).
+
+---
+
+## ✨ Citation
+
+When using this code, please cite:
+- Pedregosa et al., *Journal of Machine Learning Research*, 2011 (scikit-learn)  
+- Liu, Ting, Zhou, *ICDM 2008*, “Isolation Forest”  
+- M. De Carolis, *Dyson Sphere detection with Machine Learning* (preprint / under review)  
+- This repository (see `CITATION.cff`)
