@@ -8,7 +8,7 @@ used by the ProtoNet (`probability`, `distance`, `cosine`, or `all`).
 
 Developed in the context of:
 
-> M. De Carolis, *Dyson Sphere detection with Machine Learning* (preprint / under review).
+> M. De Carolis, P. Mignone *Dyson Sphere detection with Machine Learning* (preprint / under review).
 
 Please cite both this repository and the above article if you use the code.
 
