@@ -4,12 +4,7 @@ This repository provides a publication-ready Python pipeline to train and evalua
 Isolation Forest models for Dyson Sphere candidate detection. It supports two
 training regimes (Dyson-centric and Normal-centric) and a **weighted fusion** of
 their rankings into a single, unified list.
-
-The code was developed in the context of:
-
-> M. De Carolis, *Dyson Sphere detection with Machine Learning* (preprint / under review).
-
-Please cite both this repository and the above article if you use the code.
+ 
 
 ---
 
@@ -168,16 +163,11 @@ Results will be written to `./results` (created if missing).
 - **PyCharm**: put all arguments in *Run/Debug Configurations → Parameters*; no need for shell escaping.
 
 ---
-
-## 📜 License
-
-MIT License (see `LICENSE`).
-
----
+ 
 
 ## ✨ Citation
 
 When using this code, please cite:
 - Pedregosa et al., *Journal of Machine Learning Research*, 2011 (scikit-learn)  
 - Liu, Ting, Zhou, *ICDM 2008*, “Isolation Forest”  
-- M. De Carolis, P. Mignone, *Dyson Sphere detection with Machine Learning* (preprint / under review)  
+- Autore_1, Autore_2, *Machine learning for the prioritization of Dyson sphere candidates* (preprint / under review)
