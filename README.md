@@ -1,4 +1,4 @@
-# 🔭 Machine Learning Approach to Dyson Sphere Candidate Detection
+# Machine Learning Approach to Dyson Sphere Candidate Detection
 
 *(Anonymous repository for double-blind peer review)*
 
@@ -28,7 +28,7 @@ manuscript.
 
 This repository accompanies a manuscript **currently prepared for
 submission** to\
-**Expert Systems with Applications (Elsevier)**.\
+**Expert Systems with Applications (Elsevier)**.
 The repository is anonymized to comply with **double-blind peer-review**
 guidelines.
 
@@ -62,17 +62,6 @@ Each pipeline has its own dedicated documentation in this repository.
 -   torch (for Prototypical Networks)\
 -   joblib
 
-## Environment Setup
-
-``` bash
-python -m venv .venv
-source .venv/bin/activate         # Linux/macOS
-.venv\Scripts\Activate.ps1        # Windows PowerShell
-
-pip install -r requirements.txt
-```
-
-------------------------------------------------------------------------
 
 # 📂 Input Data Format
 
@@ -105,16 +94,10 @@ These are used exclusively for internal validation.
 
 Both pipelines:
 
-1.  Train a **Dyson-centric model**\
-2.  Train a **Normal-centric model**\
-3.  Generate two independent rankings\
-4.  Fuse them using:
-
-\[ `\text{score}`{=tex} =
-`\alpha `{=tex}`\cdot `{=tex}`\text{DysonScore}`{=tex} +
-(1-`\alpha`{=tex})`\cdot `{=tex}(1 - `\text{NormalScore}`{=tex}) \]
-
-5.  Optionally compute **Precision/Recall/F1@k** metrics
+1.  Train a **Dyson-centric model**
+2.  Train a **Normal-centric model**
+3.  Generate two independent rankings
+4.  Optionally compute **Precision/Recall/F1@k** metrics
 
 ------------------------------------------------------------------------
 
