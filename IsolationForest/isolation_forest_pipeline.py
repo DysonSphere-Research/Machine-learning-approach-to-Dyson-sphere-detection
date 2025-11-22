@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Isolation Forest — Dyson-centric / Normal-centric with Weighted Fusion (single-run)
+Isolation Forest
 
 Usage (examples):
   # Run both regimes and save only the fused ranking with default weights (0.5)
