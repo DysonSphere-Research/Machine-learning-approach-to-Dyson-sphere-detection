@@ -2,7 +2,7 @@
 
 This repository provides a publication-ready Python pipeline to train and evaluate
 **Prototypical Networks** for Dyson Sphere candidate detection. It supports two
-training regimes (Dyson-centric and Normal-centric) and a **weighted fusion** of
+training regimes and a **weighted fusion** of
 their rankings into a single, unified list. You can also choose the **scoring method**
 used by the ProtoNet (`probability`, `distance`, `cosine`, or `all`).
 
@@ -41,8 +41,8 @@ Place your files in a single directory (e.g. `./data`):
 
 ```
 data/
-  ├─ train.csv          # Dyson-centric support set (must include 'source_id' + numeric features)
-  ├─ trainNormal.csv    # Normal-centric support set (must include 'source_id' + numeric features)
+  ├─ train.csv          # Dyson support set (must include 'source_id' + numeric features)
+  ├─ trainNormal.csv    # Normal support set (must include 'source_id' + numeric features)
   ├─ test_normal.csv    # Evaluation set (must include 'source_id' + numeric features)
   ├─ num_ds.txt         # integer: number of Dyson spies at the TOP of test_normal.csv
   ├─ numNorm.txt        # integer: number of Normal spies immediately AFTER the Dyson block
