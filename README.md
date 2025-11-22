@@ -6,18 +6,13 @@ This repository contains the complete codebase, documentation, and
 experimental framework used to develop a machine-learning approach for 
 prioritizing **Dyson sphere candidates** using Gaia DR3 photometry.
 
-The project implements a **two-phase symmetric framework**, combining: -
-a **Dyson-centric** learning phase, - a **Normal-centric** learning
-phase, - and a **weighted fusion** scheme that merges the two into a
-unified probabilistic ranking of stars.
-
 Two independent pipelines are included (best models):
 
 -   **Isolation Forest pipeline** (`isolation_forest_pipeline.py`)
 -   **Prototypical Network pipeline** (`PrototypicalNetwork_pipeline.py`)
 
 Both are designed to be fully reproducible and follow the same data
-format, evaluation logic, and ranking philosophy described in the
+format, evaluation logic, and ranking approach described in the
 manuscript.
 
 ------------------------------------------------------------------------
@@ -39,7 +34,6 @@ guidelines.
      ├── PrototypicalNetwork_pipeline.py
      ├── README.md                     # (this file)
      ├── README_PrototypicalNetwork.md # detailed PN documentation
-     ├── reade.me                      # legacy instructions
      ├── data/                         # (user-provided, not included)
      └── results/                      # generated outputs
 
