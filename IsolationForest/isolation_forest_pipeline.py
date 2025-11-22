@@ -235,9 +235,7 @@ def metrics_from_ranking(
           .groupby(level=0)
           .first()
     )
-    # In alternativa:
-    # tmp = test_df.reset_index().rename(columns={"index": "pos"})
-    # pos_map = tmp.drop_duplicates("source_id", keep="first").set_index("source_id")["pos"]
+ 
 
     # Keep only IDs that exist in the mapping
     rnk = ranking.copy()
