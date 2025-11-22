@@ -35,8 +35,6 @@ Notes:
 - CLI structure mirrors the Isolation Forest pipeline for consistency across methods.
 - Add `--proto-method` to choose Prototypical scoring: 'probability', 'distance', 'cosine', or 'all'.
 - Reproducible training via --seed; small MLP encoder to map features to an L2-normalized embedding.
-
-Author: (c) 2025 Michele De Carolis & collaborators — MIT License
 """
 
 from __future__ import annotations
@@ -549,3 +547,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
